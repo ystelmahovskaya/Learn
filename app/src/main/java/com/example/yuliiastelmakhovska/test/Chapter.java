@@ -7,16 +7,26 @@ import java.util.ArrayList;
  */
 
 public class Chapter {
+    int level;
     String name;
     String description;
     int imageSourse;
     ArrayList<ContentType> list;
     public Chapter(){}
-    public Chapter(String name, String description,int imageSourse,ArrayList<ContentType> list){
+    public Chapter(int level,String name, String description,int imageSourse,ArrayList<ContentType> list){
+        this.level=level;
         this.name=name;
         this.description=description;
         this.imageSourse=imageSourse;
         this.list=list;
+    }
+
+    public int getLevel() {
+        return level;
+    }
+
+    public void setLevel(int level) {
+        this.level = level;
     }
 
     public String getName() {

@@ -47,17 +47,17 @@ public static ObservableArrayList<Chapter> chaptersWords=new ObservableArrayList
         numbers.add(three);
 
 
-        Chapter num = new Chapter("Numbers","description",(R.drawable.ic_menu_camera),numbers);
+        Chapter num = new Chapter(2,"Numbers","description",(R.drawable.ic_menu_camera),numbers);
         chaptersWords.add(num);
 
         Video video= new Video();
         video.setName("lozano");
         video.setSubtitleDelay(12000);
         videos.add(video);
-        Chapter vid = new Chapter("Ted","description",(R.drawable.lozano),videos);
-        Chapter vid2= new Chapter("Ted","description",(R.drawable.lozano),videos);
-        Chapter vid3= new Chapter("Ted","description",(R.drawable.lozano),videos);
-        Chapter vid4= new Chapter("Ted","description",(R.drawable.lozano),videos);
+        Chapter vid = new Chapter(1,"Ted","description",(R.drawable.lozano),videos);
+        Chapter vid2= new Chapter(2,"Ted","description",(R.drawable.lozano),videos);
+        Chapter vid3= new Chapter(3, "Ted","description",(R.drawable.lozano),videos);
+        Chapter vid4= new Chapter(1, "Ted","description",(R.drawable.lozano),videos);
         chaptersVideos.add(vid);
         chaptersVideos.add(vid2);
         chaptersVideos.add(vid3);
@@ -85,7 +85,7 @@ public static ObservableArrayList<Chapter> chaptersWords=new ObservableArrayList
         questions.add(question2);
 
 
-        Chapter q= new Chapter("Present Simple", "",(R.drawable.ic_menu_gallery),questions);
+        Chapter q= new Chapter(1,"Present Simple", "",(R.drawable.ic_menu_gallery),questions);
 
       chaptersQuiz.add(q);
     }

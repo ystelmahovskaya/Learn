@@ -2,7 +2,9 @@ package com.example.yuliiastelmakhovska.test;
 
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -20,12 +22,17 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     public static String user_id;
     public static String ip="10.8.1.89:8000";
+    public static int level=1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Intent intent= getIntent();
         user_id=intent.getStringExtra("user_id");
+        PreferenceManager.setDefaultValues(this, R.xml.pref_general, false);
+        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        level=sharedPrefs.getInt("level_list",1);
+
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -39,6 +46,8 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+
     }
 
     @Override
@@ -106,6 +115,16 @@ public class MainActivity extends AppCompatActivity
             case R.id.nav_send:
                 LoginManager.getInstance().logOut();
                 finish();
+                break;
+            case R.id.settings:
+                Intent settingsIntent = new Intent(this, SettingsActivity.class);
+
+                settingsIntent.putExtra( SettingsActivity.EXTRA_SHOW_FRAGMENT, SettingsActivity.GeneralPreferenceFragment.class.getName() );
+
+                settingsIntent.putExtra( SettingsActivity.EXTRA_NO_HEADERS, true );
+
+                this.startActivity(settingsIntent);
+
                 break;
 
         }

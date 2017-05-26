@@ -85,8 +85,11 @@
         <activity android:name=".VideoActivity" />
         <activity
             android:name=".QuizActivity"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
-        <activity android:name=".Statistics"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".Statistics" />
+        <activity
+            android:name=".SettingsActivity"
+            android:label="@string/title_activity_settings"></activity>
     </application>
 
 </manifest>
