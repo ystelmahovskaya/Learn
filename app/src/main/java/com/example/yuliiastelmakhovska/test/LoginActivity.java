@@ -472,7 +472,7 @@
             }
             }
             protected String getID(String email, String password) throws IOException, DownloadException, JSONException {
-           String userId="";
+           String userId=null;
 
 
                 InputStream inputStream = null;
@@ -514,7 +514,7 @@
 
             private String parseUser_id(String response) throws JSONException {
 
-                String userId="";
+                String userId=null;
                 try {
 
                     JSONObject jsonObject = new JSONObject(response);
@@ -558,7 +558,7 @@
                 mAuthTask = null;
                 showProgress(false);
 
-                if (success) {
+                if (success &&user_id!=null) {
                     Intent intent= new Intent(getApplicationContext(), MainActivity.class);
                     intent.putExtra("user_id",user_id);
                     startActivity(intent);

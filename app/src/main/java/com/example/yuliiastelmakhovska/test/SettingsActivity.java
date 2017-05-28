@@ -12,6 +12,7 @@ import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBar;
+import android.util.Log;
 import android.view.MenuItem;
 
 import java.util.List;
@@ -103,9 +104,10 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
 
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
+                    Log.i("onPreferenceClick","remove_statistics");
                     StatisticsRemoveTask statisticsRemoveTask= new StatisticsRemoveTask();
-                    statisticsRemoveTask.execute();
-                    return false;
+                    statisticsRemoveTask.execute("Statistics");
+                    return true;
                 }
             });
             Preference remove_profile = (Preference) findPreference("remove_profile");
@@ -113,8 +115,12 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
 
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
-
+                    Log.i("onPreferenceClick","remove_profile");
+                    //TODO facebook check
+                    StatisticsRemoveTask statisticsRemoveTask= new StatisticsRemoveTask();
+                    statisticsRemoveTask.execute("Users");
                     return true;
+
                 }
             });
 

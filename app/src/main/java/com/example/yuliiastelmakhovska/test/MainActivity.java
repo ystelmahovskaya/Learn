@@ -21,7 +21,7 @@ import com.facebook.login.LoginManager;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     public static String user_id;
-    public static String ip="10.8.1.89:8000";
+    public static String ip="192.168.1.215:8000";
     public static int level=1;
 
     @Override
@@ -31,7 +31,7 @@ public class MainActivity extends AppCompatActivity
         user_id=intent.getStringExtra("user_id");
         PreferenceManager.setDefaultValues(this, R.xml.pref_general, false);
         SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        level=sharedPrefs.getInt("level_list",1);
+        level=Integer.parseInt(sharedPrefs.getString("level_list","1"));
 
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);

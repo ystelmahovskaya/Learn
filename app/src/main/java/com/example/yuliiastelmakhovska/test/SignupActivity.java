@@ -1,5 +1,6 @@
 package com.example.yuliiastelmakhovska.test;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -314,10 +315,10 @@ protected void postUser(String mName, String mEmail, String mPassword )throws IO
         @Override
         protected void onPostExecute(String s) {
             if (s!=null){
-//                Intent intent= new Intent(getApplicationContext(), MainActivity.class);
-//                intent.putExtra("user_id",s);
-//                startActivity(intent);
-//                finish();
+                Intent intent= new Intent(getApplicationContext(), MainActivity.class);
+                intent.putExtra("user_id",s);
+                startActivity(intent);
+                finish();
             }
         }
     }
