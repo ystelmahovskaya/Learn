@@ -9,7 +9,7 @@
     <WebView
         android:layout_width="368dp"
         android:layout_height="495dp"
-
+android:id="@+id/webstatistics"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent"
    />

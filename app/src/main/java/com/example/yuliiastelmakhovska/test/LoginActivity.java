@@ -63,6 +63,7 @@
         private CallbackManager callbackManager;
         private static final int REQUEST_SIGNUP = 0;
         public String user_id=null;
+        String name="";
 
         /**
          * A dummy authentication store containing known user names and passwords.
@@ -88,32 +89,6 @@
             super.onCreate(savedInstanceState);
             callbackManager = CallbackManager.Factory.create();
 
-           // FacebookSdk.sdkInitialize(getApplicationContext());
-            //AppEventsLogger.activateApp(this.getApplication());
-
-
-
-//            LoginManager.getInstance().registerCallback(callbackManager,
-//                    new FacebookCallback<LoginResult>() {
-//                        @Override
-//                        public void onSuccess(LoginResult loginResult) {
-//                            Log.d("Success", "Login");
-//                                            Intent intent= new Intent(getApplicationContext(), MainActivity.class);
-//                                        intent.putExtra("user_id",loginResult.getAccessToken().getUserId());
-//                                        startActivity(intent);
-//
-//                        }
-//
-//                        @Override
-//                        public void onCancel() {
-//                            Toast.makeText(LoginActivity.this, "Login Cancel", Toast.LENGTH_LONG).show();
-//                        }
-//
-//                        @Override
-//                        public void onError(FacebookException exception) {
-//                            Toast.makeText(LoginActivity.this, exception.getMessage(), Toast.LENGTH_LONG).show();
-//                        }
-//                    });
 
 
 
@@ -168,6 +143,7 @@
                 AccessToken accessToken = AccessToken.getCurrentAccessToken();
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                 intent.putExtra("user_id", accessToken.getUserId());
+
                 startActivity(intent);
             }
             else {

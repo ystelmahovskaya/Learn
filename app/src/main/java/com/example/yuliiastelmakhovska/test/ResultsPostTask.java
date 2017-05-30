@@ -1,6 +1,7 @@
 package com.example.yuliiastelmakhovska.test;
 
 import android.os.AsyncTask;
+import android.util.Log;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -33,6 +34,7 @@ public class ResultsPostTask extends AsyncTask<Integer, Void, Void> {
             String urlParameters= "user_id=" + MainActivity.user_id +
                     "&score=" + params[0].toString()+
                     "&date=" + new Date().toString();
+            Log.i("date",""+new Date().toString());
             connection.setRequestProperty("Content-Length", "" +
                     Integer.toString(urlParameters.getBytes().length));
             connection.setRequestProperty("Content-Language", "en-US");

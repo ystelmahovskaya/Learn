@@ -2,6 +2,7 @@ package com.example.yuliiastelmakhovska.test;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -30,7 +31,6 @@ public class VideoActivity extends AppCompatActivity {
     ProgressDialog pDialog;
     VideoView videoview;
     TextView textView;
-    //String VideoURL = "https://www.youtube.com/watch?v=hS5CfP8n_js";
     MediaController mediacontroller;
     ArrayList<Subtitle>subtitles= new ArrayList<>();
     int position=0;
@@ -51,15 +51,10 @@ public class VideoActivity extends AppCompatActivity {
         } catch (ExecutionException e) {
             e.printStackTrace();
         }
-
-        // Get the layout from video_main.xml
         setContentView(R.layout.activity_video);
-        // Find your VideoView in your video_main.xml layout
         videoview = (VideoView) findViewById(R.id.videoView);
         textView=(TextView)findViewById(R.id.textView2);
-        // Execute StreamVideo AsyncTask
 
-        // Create a progressbar
         pDialog = new ProgressDialog(VideoActivity.this);
         // Set progressbar message
         pDialog.setMessage("Buffering...");
@@ -74,10 +69,8 @@ public class VideoActivity extends AppCompatActivity {
                     VideoActivity.this);
             mediacontroller.setAnchorView(videoview);
 
-            // Get the URL from String VideoURL
-           // Uri video = Uri.parse(VideoURL);
+
             videoview.setMediaController(mediacontroller);
-           // videoview.setVideoURI(video);
             videoview.setVideoPath("http://"+MainActivity.ip+"/content/"+video.name+".mp4");
 
             videoview.setOnTouchListener(new View.OnTouchListener()
@@ -109,7 +102,13 @@ public class VideoActivity extends AppCompatActivity {
                     }
                 }
             });
-            videoview.start();
+            videoview.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                // Close the progress bar and play the video
+                public void onPrepared(MediaPlayer mp) {
+                    pDialog.dismiss();
+                    videoview.start();
+                }
+            });
         } catch (Exception e) {
             Log.e("Error", e.getMessage());
             e.printStackTrace();
@@ -121,13 +120,7 @@ public class VideoActivity extends AppCompatActivity {
 
 //        videoview.requestFocus();
 //
-//        videoview.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-//            // Close the progress bar and play the video
-//            public void onPrepared(MediaPlayer mp) {
-//                pDialog.dismiss();
-//                videoview.start();
-//            }
-//        });
+
 
     }
 

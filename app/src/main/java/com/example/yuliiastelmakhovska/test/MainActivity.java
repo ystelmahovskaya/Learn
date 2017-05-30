@@ -76,9 +76,7 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
+       
 
         return super.onOptionsItemSelected(item);
     }
@@ -111,6 +109,9 @@ public class MainActivity extends AppCompatActivity
             case R.id.nav_share:
                 fragment=new ChaptersList(Content.getChaptersQuiz());
 
+                break;
+            case R.id.statistics:
+                fragment=new Statistics();
                 break;
             case R.id.nav_send:
                 LoginManager.getInstance().logOut();

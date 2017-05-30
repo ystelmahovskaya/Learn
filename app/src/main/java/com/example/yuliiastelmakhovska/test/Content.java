@@ -4,6 +4,8 @@ import android.databinding.BaseObservable;
 import android.databinding.ObservableArrayList;
 import android.util.Log;
 
+import com.google.gson.Gson;
+
 import java.util.ArrayList;
 
 /**
@@ -34,7 +36,7 @@ public static ObservableArrayList<Chapter> chaptersWords=new ObservableArrayList
         Word two = new Word();
         two.setWord("two");
         two.setTranscription("[tuː]");
-        two.addTranslation("two");
+        two.addTranslation("två");
         two.addTranslation("два");
 
         Word three = new Word();
@@ -64,22 +66,22 @@ public static ObservableArrayList<Chapter> chaptersWords=new ObservableArrayList
         chaptersVideos.add(vid4);
 
         Question question1= new Question();
-        question1.setCorrectAnswer(2);
+        question1.setCorrectAnswer(1);
         question1.setAnswers(new ArrayList<Answer>());
-        question1.setName("question1");
-        question1.getAnswers().add(new Answer(1,"answer1"));
-        question1.getAnswers().add(new Answer(2,"answer2"));
-        question1.getAnswers().add(new Answer(3,"answer3"));
-        question1.getAnswers().add(new Answer(4,"answer4"));
+        question1.setName("We sometimes ____ books.");
+        question1.getAnswers().add(new Answer(1,"read"));
+        question1.getAnswers().add(new Answer(2,"readed"));
+        question1.getAnswers().add(new Answer(3,"reading"));
+        question1.getAnswers().add(new Answer(4,"reads"));
 
         Question question2= new Question();
-        question2.setCorrectAnswer(3);
+        question2.setCorrectAnswer(2);
         question2.setAnswers(new ArrayList<Answer>());
-        question2.setName("question2");
-        question2.getAnswers().add(new Answer(1,"answer1"));
-        question2.getAnswers().add(new Answer(2,"answer2"));
-        question2.getAnswers().add(new Answer(3,"answer3"));
-        question2.getAnswers().add(new Answer(4,"answer4"));
+        question2.setName("Emily ____ to the disco");
+        question2.getAnswers().add(new Answer(1,"go"));
+        question2.getAnswers().add(new Answer(2,"goes"));
+        question2.getAnswers().add(new Answer(3,"went"));
+        question2.getAnswers().add(new Answer(4,"gone"));
         ObservableArrayList<ContentType> questions= new ObservableArrayList<>();
         questions.add(question1);
         questions.add(question2);
@@ -96,13 +98,21 @@ public static ObservableArrayList<Chapter> chaptersWords=new ObservableArrayList
     }
 
     public static ObservableArrayList<Chapter> getChaptersWords() {
+
+
+        String json = new Gson().toJson(chaptersWords);
+        Log.i("ch",""+json);
         return chaptersWords;
     }
     public static ObservableArrayList<Chapter> getChaptersVideos() {
+        String json = new Gson().toJson(chaptersVideos);
+        Log.i("ch",""+json);
         return chaptersVideos;
     }
 
     public static ObservableArrayList<Chapter> getChaptersQuiz() {
+        String json = new Gson().toJson(chaptersQuiz);
+        Log.i("ch",""+json);
         return chaptersQuiz;
     }
 
@@ -110,11 +120,4 @@ public static ObservableArrayList<Chapter> chaptersWords=new ObservableArrayList
         return numbers;
     }
 
-//    @BindingAdapter("app:items")
-//    public static void bindList(RecyclerView view, ObservableArrayList<Word> list) {
-//        LinearLayoutManager layoutManager = new LinearLayoutManager(view.getContext());
-//        view.setLayoutManager(layoutManager);
-//        view.setAdapter(new WordAdapter(list));
-//
-//    }
 }

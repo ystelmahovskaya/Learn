@@ -9,7 +9,6 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -123,7 +122,7 @@ setCountdown();
             index = index + 1;
             binding.setQuestion(questions.get(index));
             countdown.cancel(true);
-future.cancel(true);
+            future.cancel(true);
             future= scheduler.scheduleAtFixedRate(new Runnable() {
                 @Override
                 public void run() {
@@ -134,6 +133,7 @@ future.cancel(true);
                                 index = index + 1;
                                 binding.setQuestion(questions.get(index));
                             }
+
 
                         }
                     });

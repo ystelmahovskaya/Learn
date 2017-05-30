@@ -30,8 +30,8 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
             <ImageView android:src="@drawable/lang"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
+                android:layout_width="200dp"
+                android:layout_height="200dp"
                 android:layout_marginBottom="20dp"
                 android:layout_gravity="center_horizontal" />
 
@@ -74,7 +74,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:text="@string/action_sign_in"
+                android:text="Sign in"
                 android:textStyle="bold" />
 
             <TextView android:id="@+id/link_signup"
