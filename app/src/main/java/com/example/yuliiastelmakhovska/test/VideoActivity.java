@@ -194,6 +194,7 @@ public class VideoActivity extends AppCompatActivity {
 
         private ArrayList<Subtitle> parseSubtitles(String response) throws JSONException {
 
+
             ArrayList<Subtitle>subtitles= new ArrayList<>();
             try {
 

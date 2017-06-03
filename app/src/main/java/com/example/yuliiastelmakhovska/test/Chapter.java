@@ -1,12 +1,15 @@
 package com.example.yuliiastelmakhovska.test;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.ArrayList;
 
 /**
  * Created by yuliiastelmakhovska on 2017-05-12.
  */
 
-public class Chapter {
+public class Chapter implements Parcelable {
     int level;
     String name;
     String description;
@@ -20,6 +23,26 @@ public class Chapter {
         this.imageSourse=imageSourse;
         this.list=list;
     }
+    public Chapter(Parcel in) {
+        level = in.readInt();
+        name = in.readString();
+        description = in.readString();
+        imageSourse = in.readInt();
+        list= (ArrayList<ContentType>) in.readSerializable();
+
+    }
+
+    public static final Creator<Chapter> CREATOR = new Creator<Chapter>() {
+        @Override
+        public Chapter createFromParcel(Parcel in) {
+            return new Chapter(in);
+        }
+
+        @Override
+        public Chapter[] newArray(int size) {
+            return new Chapter[size];
+        }
+    };
 
     public int getLevel() {
         return level;
@@ -59,5 +82,20 @@ public class Chapter {
 
     public void setList(ArrayList<ContentType> list) {
         this.list = list;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(getLevel());
+        dest.writeString(getName());
+        dest.writeString(getDescription());
+        dest.writeInt(getImageSourse());
+        dest.writeSerializable(getList());
+
     }
 }

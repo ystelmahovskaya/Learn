@@ -32,6 +32,7 @@ ObservableArrayList<Chapter>chapters;
         final View rootView = inflater.inflate(R.layout.chapter_list_layout, container, false);
         ChapterViewModel chapterViewModel= new ChapterViewModel();
         chapterViewModel.setChapters(chapters);
+
         ChapterListLayoutBinding binding = DataBindingUtil.bind(rootView); ;
         binding.setModel(chapterViewModel);
 //
@@ -49,5 +50,7 @@ ObservableArrayList<Chapter>chapters;
         getActivity().setTitle("Chapters");
 
     }
+
+
 
 }

@@ -104,6 +104,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
 
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
+
                     Log.i("onPreferenceClick","remove_statistics");
                     StatisticsRemoveTask statisticsRemoveTask= new StatisticsRemoveTask();
                     statisticsRemoveTask.execute("Statistics");

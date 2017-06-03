@@ -3,6 +3,7 @@ package com.example.yuliiastelmakhovska.test;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.databinding.ObservableArrayList;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.NavigationView;
@@ -18,11 +19,18 @@ import android.view.MenuItem;
 
 import com.facebook.login.LoginManager;
 
+import java.text.ParseException;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     public static String user_id;
     public static String ip="192.168.1.215:8000";
     public static int level=1;
+    ScheduledExecutorService scheduler;
+    Content content;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +40,10 @@ public class MainActivity extends AppCompatActivity
         PreferenceManager.setDefaultValues(this, R.xml.pref_general, false);
         SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         level=Integer.parseInt(sharedPrefs.getString("level_list","1"));
+        content=new Content(getApplicationContext());
+        content.sendRequest();
+        scheduler = Executors.newSingleThreadScheduledExecutor();
+        autoUpdateTimer(15);
 
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -104,7 +116,14 @@ public class MainActivity extends AppCompatActivity
 
                 break;
             case R.id.nav_slideshow:
-                fragment=new ChaptersList(Content.getChaptersVideos());
+                ContentRepo repo= new ContentRepo(getApplicationContext());
+                ObservableArrayList<Chapter> videos= new ObservableArrayList<>();
+                try {
+                     videos= repo.getVideoChapters(1);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                fragment=new ChaptersList(videos);
                 break;
             case R.id.nav_share:
                 fragment=new ChaptersList(Content.getChaptersQuiz());
@@ -135,6 +154,24 @@ public class MainActivity extends AppCompatActivity
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
+    }
+
+    public void autoUpdateTimer(int time){
+        scheduler.isShutdown();
+        scheduler.scheduleAtFixedRate
+                (new Runnable() {
+                    @Override
+                    public void run() {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                content.sendRequest();
+                            }
+                        });
+
+                    }
+                }, 0, time, TimeUnit.SECONDS);
+
     }
 
 
