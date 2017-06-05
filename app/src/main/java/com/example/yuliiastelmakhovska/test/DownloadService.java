@@ -42,6 +42,8 @@ public class DownloadService extends IntentService {
 
         final ResultReceiver receiver = intent.getParcelableExtra("receiver");
         String url = intent.getStringExtra("url");
+        String urlQuiz = intent.getStringExtra("urlQuiz");
+
 
         Bundle bundle = new Bundle();
 
@@ -50,9 +52,11 @@ public class DownloadService extends IntentService {
             /* Update UI: Download Service is Running */
             // receiver.send(STATUS_RUNNING, Bundle.EMPTY);
             ArrayList<Chapter> videos = new ArrayList<>();
+            ArrayList<Chapter> quiz = new ArrayList<>();
 
             try {
-                videos = downloadData(url);
+                videos = downloadData(url, 1);
+                quiz= downloadData(urlQuiz, 2);
             } catch (IOException e) {
                 e.printStackTrace();
             } catch (DownloadException e) {
@@ -61,20 +65,22 @@ public class DownloadService extends IntentService {
 
 
                 /* Sending result back to activity */
-            if (null != videos && videos.size() > 0) {
+            if (null != videos && videos.size()>0 &&null != quiz && quiz.size() > 0) {
 
                 bundle.putParcelableArrayList("result", videos);
+                bundle.putParcelableArrayList("resultQuiz", quiz);
                 receiver.send(STATUS_FINISHED, bundle);
             } else {
 
                 bundle.putParcelableArrayList("result", videos);
+                bundle.putParcelableArrayList("resultQuiz", quiz);
                 receiver.send(STATUS_FINISHED, bundle);
             }
         }
         this.stopSelf();
     }
 
-    private ArrayList<Chapter> downloadData(String requestUrl) throws IOException, DownloadException {
+    private ArrayList<Chapter> downloadData(String requestUrl, int parameter) throws IOException, DownloadException {
         //   Log.d(TAG, "downloadData works!");
         InputStream inputStream = null;
         HttpURLConnection urlConnection = null;
@@ -99,9 +105,14 @@ public class DownloadService extends IntentService {
             Log.i("statusCode", "200");
             inputStream = new BufferedInputStream(urlConnection.getInputStream());
             String response = convertInputStreamToString(inputStream);
-            ArrayList<Chapter> videos = parseResult(response);
-
-            return videos;
+            ArrayList<Chapter> list=null;
+            if(parameter==1) {
+                list = parseResult(response);
+            }
+            else if(parameter==2){
+                list = parseResultQuiz(response);
+            }
+            return list;
         } else {
             throw new DownloadException("Failed to fetch data!!");
         }
@@ -167,7 +178,7 @@ public class DownloadService extends IntentService {
 
                 videos.add(chapter);
 
-                repo.insert(chapter);
+                repo.insertVideoChapters(chapter);
 
             }
         } catch (JSONException e) {
@@ -176,6 +187,98 @@ public class DownloadService extends IntentService {
         repo.close();
         return videos;
     }
+
+
+
+
+    private ArrayList<Chapter> parseResultQuiz(String result) {
+
+        ArrayList<Chapter> quiz = new ArrayList<>();
+        ContentRepo repo = new ContentRepo(getApplicationContext());
+        repo.deleteAllQuiz();
+        try {
+
+            JSONArray jsonArray = new JSONArray(result);
+            for (int i = 0; i < jsonArray.length(); i++) {
+                String id=null;
+                Chapter chapter = new Chapter();
+                if (jsonArray.getJSONObject(i).has("description")) {
+                    chapter.setDescription(jsonArray.getJSONObject(i).getString("description"));
+                }
+                if (jsonArray.getJSONObject(i).has("imageSourse")) {
+                    chapter.setImageSourse(jsonArray.getJSONObject(i).getInt("imageSourse"));
+                }
+                if (jsonArray.getJSONObject(i).has("level")) {
+                    chapter.setLevel(jsonArray.getJSONObject(i).getInt("level"));
+                }
+                if (jsonArray.getJSONObject(i).has("name")) {
+                    chapter.setName(jsonArray.getJSONObject(i).getString("name"));
+                }
+                if (jsonArray.getJSONObject(i).has("_id")) {
+                    id=jsonArray.getJSONObject(i).getString("_id");
+                }
+
+                if (jsonArray.getJSONObject(i).has("list")) {
+                    ArrayList<ContentType> q = new ArrayList<>();
+                    JSONArray v = jsonArray.getJSONObject(i).getJSONArray("list");
+                    for (int j = 0; j < v.length(); j++) {
+
+                        Question question= new Question();
+                        if (v.getJSONObject(j).has("text")) {
+                            question.setName(v.getJSONObject(j).getString("text"));
+                        }
+                        if (v.getJSONObject(j).has("correctAnswer")) {
+                            question.setCorrectAnswer(v.getJSONObject(j).getInt("correctAnswer"));
+                        }
+                        if (v.getJSONObject(j).has("answers")) {
+                            JSONArray answers = v.getJSONObject(j).getJSONArray("answers");
+                            ArrayList<Answer>answerArrayList= new ArrayList<>();
+                            for (int k = 0; k < answers.length(); k++) {
+                                if (answers.getJSONObject(k).has("text")) {
+                                    answerArrayList.add(new Answer(k+1,answers.getJSONObject(k).getString("text")));
+                                }
+                            }
+                            question.setAnswers(answerArrayList);
+                            q.add(question);
+                        }
+
+
+                        chapter.setList(q);
+                    }
+                }
+
+                quiz.add(chapter);
+
+                repo.insertQuizChapters(chapter,id);
+
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        repo.close();
+        Log.i("quiz size",""+quiz.size());
+        return quiz;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 //    private void showNotification(int number, int distance) {
 //        Log.i(TAG, "showNotification: in ");
 //        // Bitmap bm = BitmapFactory.decodeResource(this.getResources(), R.drawable.cat);

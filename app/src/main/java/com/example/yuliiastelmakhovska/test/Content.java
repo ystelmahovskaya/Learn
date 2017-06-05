@@ -147,9 +147,11 @@ public static ObservableArrayList<Chapter> chaptersWords=new ObservableArrayList
 //        String profileId = sharedPref.getString("profile_id", "3206");
 
         String url = "http://"+MainActivity.ip+"/ContentVideos";
+        String urlQuiz = "http://"+MainActivity.ip+"/ContentQuiz";
 
 
         intent.putExtra("url", url);
+        intent.putExtra("urlQuiz", urlQuiz);
         intent.putExtra("receiver", mReceiver);
         intent.putExtra("requestId", 101);
         context.startService(intent);
@@ -168,7 +170,9 @@ public static ObservableArrayList<Chapter> chaptersWords=new ObservableArrayList
                 ArrayList<Chapter>listtmp = resultData.getParcelableArrayList("result");
                 chaptersVideos.clear();
                 chaptersVideos.addAll(listtmp);
-Log.i("listtmp",""+listtmp.size());
+                ArrayList<Chapter>listtmpquiz = resultData.getParcelableArrayList("resultQuiz");
+                chaptersQuiz.clear();
+                chaptersQuiz.addAll(listtmpquiz);
 
                     notifyChange();
 

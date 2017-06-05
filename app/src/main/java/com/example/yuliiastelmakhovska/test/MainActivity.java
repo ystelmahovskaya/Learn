@@ -107,6 +107,7 @@ public class MainActivity extends AppCompatActivity
 
     public void displaySelectedScreen(int id){
         Fragment fragment= null;
+        ContentRepo repo= new ContentRepo(getApplicationContext());
         switch (id){
             case R.id.nav_camera:
                 fragment=new ChaptersList(Content.getChaptersWords());
@@ -116,7 +117,7 @@ public class MainActivity extends AppCompatActivity
 
                 break;
             case R.id.nav_slideshow:
-                ContentRepo repo= new ContentRepo(getApplicationContext());
+
                 ObservableArrayList<Chapter> videos= new ObservableArrayList<>();
                 try {
                      videos= repo.getVideoChapters(1);
@@ -126,7 +127,16 @@ public class MainActivity extends AppCompatActivity
                 fragment=new ChaptersList(videos);
                 break;
             case R.id.nav_share:
-                fragment=new ChaptersList(Content.getChaptersQuiz());
+                ObservableArrayList<Chapter> quiz= new ObservableArrayList<>();
+                try {
+                    quiz=repo.getQuizChapters(1);
+
+
+
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                fragment=new ChaptersList(quiz);
 
                 break;
             case R.id.statistics:
