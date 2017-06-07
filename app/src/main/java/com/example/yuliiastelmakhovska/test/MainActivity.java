@@ -14,6 +14,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -27,7 +28,7 @@ import java.util.concurrent.TimeUnit;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     public static String user_id;
-    public static String ip="192.168.1.215:8000";
+    public static String ip="10.8.1.244:8000";
     public static int level=1;
     ScheduledExecutorService scheduler;
     Content content;
@@ -110,7 +111,14 @@ public class MainActivity extends AppCompatActivity
         ContentRepo repo= new ContentRepo(getApplicationContext());
         switch (id){
             case R.id.nav_camera:
-                fragment=new ChaptersList(Content.getChaptersWords());
+                ObservableArrayList<Chapter> words= new ObservableArrayList<>();
+                try {
+                    words= repo.getWordsChapters(level);
+                    Log.i("nav_camera",""+words.size());
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                fragment=new ChaptersList(words);
                 break;
             case R.id.nav_gallery:
                 fragment=new MyDictionary();
@@ -120,7 +128,7 @@ public class MainActivity extends AppCompatActivity
 
                 ObservableArrayList<Chapter> videos= new ObservableArrayList<>();
                 try {
-                     videos= repo.getVideoChapters(1);
+                     videos= repo.getVideoChapters(level);
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
@@ -129,7 +137,7 @@ public class MainActivity extends AppCompatActivity
             case R.id.nav_share:
                 ObservableArrayList<Chapter> quiz= new ObservableArrayList<>();
                 try {
-                    quiz=repo.getQuizChapters(1);
+                    quiz=repo.getQuizChapters(level);
 
 
 

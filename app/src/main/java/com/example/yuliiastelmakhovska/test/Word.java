@@ -81,6 +81,6 @@ public Word(){}
 
     @Override
     public String getName() {
-        return null;
+        return word;
     }
 }

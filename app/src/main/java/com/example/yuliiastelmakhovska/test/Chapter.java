@@ -69,7 +69,7 @@ public class Chapter implements Parcelable {
     }
 
     public void setDescription(String description) {
-        description = description;
+        this.description = description;
     }
 
     public void setImageSourse(int imageSourse) {

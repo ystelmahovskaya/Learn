@@ -130,18 +130,11 @@ word.setTranslations(translation);
     public void deleteItemFromDB(Word word){
         SQLiteDatabase DictionaryDb = this.getWritableDatabase();
         DictionaryDb.delete("Dictionary","word=? ",new String[]{word.getWord()});
-//        for(int i=0; i<FullscreenMainActivity.controller.poiListFromDB.size(); i++){TODO inplement delete from list
-//            if(FullscreenMainActivity.controller.poiListFromDB.get(i).getLocation().getAltitude()==poi.getLocation().getAltitude()&&
-//                    FullscreenMainActivity.controller.poiListFromDB.get(i).getLocation().getLongitude()==poi.getLocation().getLongitude()){
-//                FullscreenMainActivity.controller.poiListFromDB.remove(i);
-//            }
-//        }
         DictionaryDb.close();
     }
     public void deleteAll(){
         SQLiteDatabase DictionaryDb = this.getWritableDatabase();
         DictionaryDb.execSQL("delete from Dictionary");
-//        FullscreenMainActivity.controller.poiListFromDB.clear();//TODO inplement redraw
         DictionaryDb.close();
     }
 }

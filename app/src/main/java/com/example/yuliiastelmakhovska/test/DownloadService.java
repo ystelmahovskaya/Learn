@@ -43,6 +43,7 @@ public class DownloadService extends IntentService {
         final ResultReceiver receiver = intent.getParcelableExtra("receiver");
         String url = intent.getStringExtra("url");
         String urlQuiz = intent.getStringExtra("urlQuiz");
+        String urlWords = intent.getStringExtra("urlWords");
 
 
         Bundle bundle = new Bundle();
@@ -53,10 +54,11 @@ public class DownloadService extends IntentService {
             // receiver.send(STATUS_RUNNING, Bundle.EMPTY);
             ArrayList<Chapter> videos = new ArrayList<>();
             ArrayList<Chapter> quiz = new ArrayList<>();
-
+            ArrayList<Chapter> words = new ArrayList<>();
             try {
                 videos = downloadData(url, 1);
                 quiz= downloadData(urlQuiz, 2);
+                words=downloadData(urlWords,3);
             } catch (IOException e) {
                 e.printStackTrace();
             } catch (DownloadException e) {
@@ -69,11 +71,13 @@ public class DownloadService extends IntentService {
 
                 bundle.putParcelableArrayList("result", videos);
                 bundle.putParcelableArrayList("resultQuiz", quiz);
+                bundle.putParcelableArrayList("resultWords", words);
                 receiver.send(STATUS_FINISHED, bundle);
             } else {
 
                 bundle.putParcelableArrayList("result", videos);
                 bundle.putParcelableArrayList("resultQuiz", quiz);
+                bundle.putParcelableArrayList("resultWords", words);
                 receiver.send(STATUS_FINISHED, bundle);
             }
         }
@@ -111,6 +115,9 @@ public class DownloadService extends IntentService {
             }
             else if(parameter==2){
                 list = parseResultQuiz(response);
+            }
+            else if(parameter==3){
+                list = parseResultWord(response);
             }
             return list;
         } else {
@@ -263,7 +270,75 @@ public class DownloadService extends IntentService {
 
 
 
+    private ArrayList<Chapter> parseResultWord(String result) {
 
+        ArrayList<Chapter> words = new ArrayList<>();
+        ContentRepo repo = new ContentRepo(getApplicationContext());
+       repo.deleteAllWords();
+        try {
+
+            JSONArray jsonArray = new JSONArray(result);
+            for (int i = 0; i < jsonArray.length(); i++) {
+                String id=null;
+                Chapter chapter = new Chapter();
+                if (jsonArray.getJSONObject(i).has("description")) {
+                    chapter.setDescription(jsonArray.getJSONObject(i).getString("description"));
+                }
+                if (jsonArray.getJSONObject(i).has("imageSourse")) {
+                    chapter.setImageSourse(jsonArray.getJSONObject(i).getInt("imageSourse"));
+                }
+                if (jsonArray.getJSONObject(i).has("level")) {
+                    chapter.setLevel(jsonArray.getJSONObject(i).getInt("level"));
+                }
+                if (jsonArray.getJSONObject(i).has("name")) {
+                    chapter.setName(jsonArray.getJSONObject(i).getString("name"));
+                }
+                if (jsonArray.getJSONObject(i).has("_id")) {
+                    id=jsonArray.getJSONObject(i).getString("_id");
+                }
+
+                if (jsonArray.getJSONObject(i).has("list")) {
+                    ArrayList<ContentType> q = new ArrayList<>();
+                    JSONArray v = jsonArray.getJSONObject(i).getJSONArray("list");
+                    for (int j = 0; j < v.length(); j++) {
+
+                        Word word= new Word();
+
+                        if (v.getJSONObject(j).has("word")) {
+                            word.setWord(v.getJSONObject(j).getString("word"));
+                            Log.i("setWord",""+v.getJSONObject(j).getString("word"));
+                        }
+                        if (v.getJSONObject(j).has("transcription")) {
+                            word.setTranscription(v.getJSONObject(j).getString("transcription"));
+                        }
+                        if (v.getJSONObject(j).has("translations")) {
+                            JSONArray trans = v.getJSONObject(j).getJSONArray("translations");
+                            ArrayList<String>translations = new ArrayList<>();
+
+                           translations.add(trans.getString(0));
+                            translations.add(trans.getString(1));
+
+                            word.setTranslations(translations);
+                            q.add(word);
+                        }
+
+
+                        chapter.setList(q);
+                    }
+                }
+
+                words.add(chapter);
+
+                repo.insertWordsChapters(chapter,id);
+
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        repo.close();
+        Log.i("quiz size",""+words.size());
+        return words;
+    }
 
 
 

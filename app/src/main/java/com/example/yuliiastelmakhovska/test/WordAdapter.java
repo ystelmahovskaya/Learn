@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -103,7 +102,7 @@ this.context=context;
                   Fragment fragment =  (Fragment)(rootView.findViewById(R.id.fragment_dictionary_view).getTag());
 
                     if (fragment instanceof MyDictionary) {
-                        Log.e("instanceof", "MyDictionary");
+
                         ((MyDictionary) fragment).promptSpeechInput(r.word);
 
                     }
@@ -112,7 +111,7 @@ this.context=context;
                                          });
 
 
-            if (repo.isInDictionaryDb(r.getWord())){
+            if (!r.getWord().contains(" ")&&repo.isInDictionaryDb(r.getWord())){
                 holder.addToDictionary.setChecked(true);
 
             }

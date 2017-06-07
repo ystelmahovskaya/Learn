@@ -148,10 +148,12 @@ public static ObservableArrayList<Chapter> chaptersWords=new ObservableArrayList
 
         String url = "http://"+MainActivity.ip+"/ContentVideos";
         String urlQuiz = "http://"+MainActivity.ip+"/ContentQuiz";
+        String urlWords = "http://"+MainActivity.ip+"/ContentWords";
 
 
         intent.putExtra("url", url);
         intent.putExtra("urlQuiz", urlQuiz);
+        intent.putExtra("urlWords",urlWords);
         intent.putExtra("receiver", mReceiver);
         intent.putExtra("requestId", 101);
         context.startService(intent);
@@ -173,6 +175,10 @@ public static ObservableArrayList<Chapter> chaptersWords=new ObservableArrayList
                 ArrayList<Chapter>listtmpquiz = resultData.getParcelableArrayList("resultQuiz");
                 chaptersQuiz.clear();
                 chaptersQuiz.addAll(listtmpquiz);
+                ArrayList<Chapter>listtmpwords = resultData.getParcelableArrayList("resultWords");
+                chaptersWords.clear();
+                chaptersWords.addAll(listtmpwords);
+
 
                     notifyChange();
 
